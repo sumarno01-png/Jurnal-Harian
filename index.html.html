@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Absensi & Jurnal Pembelajaran Guru</title>
+<style>
+:root{--primary:#176b87;--secondary:#0f4c5c;--bg:#f4f7f9;--card:#fff;--text:#203040;--muted:#6b7785;--border:#dce4ea;--danger:#c0392b;--success:#218838}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
+.app{display:flex;min-height:100vh}.sidebar{width:245px;background:linear-gradient(180deg,var(--secondary),#123a48);color:#fff;padding:18px;position:sticky;top:0;height:100vh}
+.brand{font-weight:800;font-size:18px;line-height:1.25;padding:8px 5px 18px}.brand small{display:block;font-weight:400;font-size:11px;opacity:.75;margin-top:5px}
+.nav button{display:block;width:100%;border:0;background:transparent;color:#e9f4f7;text-align:left;padding:11px 12px;border-radius:9px;margin:3px 0;cursor:pointer;font-size:14px}.nav button:hover,.nav button.active{background:rgba(255,255,255,.14)}
+.main{flex:1;padding:22px;max-width:1500px;margin:auto;width:100%}.top{display:flex;justify-content:space-between;gap:15px;align-items:center;margin-bottom:18px}.top h1{margin:0;font-size:25px}.schooltag{color:var(--muted);font-size:13px}
+.page{display:none}.page.active{display:block}.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:18px;box-shadow:0 3px 12px rgba(20,50,70,.04)}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+label{font-size:12px;font-weight:700;color:#536170;display:block;margin-bottom:5px}input,select,textarea{width:100%;padding:9px 10px;border:1px solid var(--border);border-radius:8px;font:inherit;background:#fff}textarea{min-height:90px;resize:vertical}
+.btn{border:0;border-radius:8px;padding:9px 13px;cursor:pointer;font-weight:700;background:#e8eef2;color:#24404d}.btn.primary{background:var(--primary);color:#fff}.btn.success{background:var(--success);color:#fff}.btn.danger{background:var(--danger);color:#fff}.btn.sm{padding:6px 9px;font-size:12px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}.stats{display:grid;grid-template-columns:repeat(7,1fr);gap:10px}.stat{background:#fff;border:1px solid var(--border);border-radius:12px;padding:14px}.stat b{font-size:24px;display:block}.stat span{font-size:11px;color:var(--muted)}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{border-bottom:1px solid var(--border);padding:8px;text-align:left;vertical-align:middle}th{background:#f5f8fa;font-size:12px;position:sticky;top:0;z-index:1}.tablewrap{overflow:auto;max-height:65vh;border:1px solid var(--border);border-radius:10px}
+.badge{display:inline-block;padding:3px 7px;border-radius:999px;font-size:11px;font-weight:700}.H{background:#dff4e5;color:#19733a}.S{background:#fff0c9;color:#7a5b00}.I{background:#dcecff;color:#1e5a98}.A{background:#ffe0de;color:#9c2e26}.D{background:#eee1ff;color:#6d36a4}
+.notice{padding:10px 12px;border-radius:9px;background:#edf7fa;color:#245b6b;font-size:13px}.dangertext{color:var(--danger);font-size:12px}.muted{color:var(--muted)}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.4);display:none;align-items:center;justify-content:center;padding:15px;z-index:10}.modal.show{display:flex}.modalbox{background:#fff;border-radius:14px;padding:20px;max-width:650px;width:100%;max-height:90vh;overflow:auto}
+@media(max-width:1000px){.sidebar{width:205px}.grid{grid-template-columns:repeat(2,1fr)}.stats{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:700px){.app{display:block}.sidebar{width:100%;height:auto;position:static;padding:10px}.nav{display:flex;overflow:auto;gap:4px}.nav button{white-space:nowrap;width:auto}.main{padding:12px}.grid,.grid2{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.top{display:block}}
+
+/* Kementerian-inspired refinement */
+body{background:#eef3f6 center/cover fixed no-repeat;transition:background-image .5s ease,background-color .3s ease}.main{background:transparent}.page{background:transparent}.page.active{background:transparent}.card{background:rgba(255,255,255,.88);}.dashboard-hero{background:transparent!important;backdrop-filter:none}.dashboard-hero:after{display:none}.dashboard-caption,.bg-counter{display:none}.dashboard-hero{min-height:calc(100vh - 95px);padding:0}.tablewrap{background:rgba(255,255,255,.92)}
+.brand{letter-spacing:.2px}.sidebar{box-shadow:3px 0 18px rgba(10,40,55,.12)}
+.govbar{height:4px;background:linear-gradient(90deg,#0b5d3b 0 33%,#f4c542 33% 66%,#b72025 66%);border-radius:99px;margin:-8px 0 16px}
+.dashboard-hero{min-height:calc(100vh - 95px);display:flex;align-items:flex-end;justify-content:center;padding:28px;text-align:center;position:relative;border-radius:18px;overflow:hidden;background:linear-gradient(180deg,rgba(8,30,45,.02),rgba(8,30,45,.12));}
+.dashboard-hero:after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(0,0,0,.22));pointer-events:none}.dashboard-caption{position:relative;z-index:2;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.6);max-width:850px}.dashboard-caption h2{font-size:clamp(24px,4vw,46px);margin:0 0 8px;font-weight:800}.dashboard-caption p{margin:0;font-size:14px}
+#dashboard{min-height:calc(100vh - 95px)}
+.bg-counter{position:absolute;right:15px;top:15px;z-index:3;background:rgba(0,0,0,.35);color:#fff;padding:7px 10px;border-radius:999px;font-size:11px}
+.recap-toolbar{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:end}.print-head{display:none}
+@media print{body{background:#fff!important}.sidebar,.top,.actions,.recap-toolbar{display:none!important}.main{padding:0!important}.page{display:none!important}.page.printing{display:block!important}.print-head{display:block;text-align:center;margin-bottom:12px}.tablewrap{max-height:none!important;overflow:visible!important;border:0}.card{box-shadow:none;border:0}.dashboard-hero{min-height:0}}
+@media(max-width:700px){.recap-toolbar{grid-template-columns:1fr}.dashboard-hero{min-height:calc(100vh - 125px)}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand">ABSENSI & JURNAL<small>Administrasi Pembelajaran Guru</small></div>
+  <div class="nav">
+    <button data-page="dashboard" class="active">🏠 DASHBOARD</button>
+    <button data-page="siswa">👥 DATA SISWA</button>
+    <button data-page="pertemuan">📅 PERTEMUAN</button>
+    <button data-page="absensi">✓ ABSENSI</button>
+    <button data-page="sikap">📝 ASESMEN FORMATIF</button>
+    <button data-page="pengetahuan">📊 ASESMEN SUMATIF</button>
+    <button data-page="jurnal">📖 JURNAL GURU</button>
+    <button data-page="rekapAbsensi">📊 REKAP ABSENSI</button>
+    <button data-page="rekapNilai">📈 REKAP NILAI</button>
+    <button data-page="pengaturan">⚙ PENGATURAN</button>
+    <button data-page="tampilan">🎨 UBAH TAMPILAN</button>
+  </div>
+</aside>
+<main class="main">
+<div class="govbar"></div>
+<div class="top"><div><h1 id="title">Dashboard</h1><div class="schooltag" id="schooltag"></div></div>
+</div>
+
+<section id="dashboard" class="page active">
+<div class="dashboard-hero" id="dashboardHero" aria-label="Latar belakang dashboard"></div>
+</section>
+
+<section id="siswa" class="page">
+<div class="card"><h3>Import Data Siswa dari Excel</h3>
+<div class="notice">Kolom yang didukung: No, NIS, NISN, Nama Siswa, L/P, Kelas, Jurusan. Data disimpan di browser perangkat ini.</div>
+<div class="actions"><button class="btn primary" onclick="downloadTemplate()">⬇ Download Template Excel</button><label class="btn primary" style="cursor:pointer">📥 Import Excel<input id="excelFile" type="file" accept=".xlsx,.xls,.csv" hidden></label><button class="btn" onclick="manualStudent()">＋ Tambah Siswa Manual</button><button class="btn danger" onclick="clearStudents()">Hapus Semua Data</button></div>
+</div>
+<div class="card"><div class="grid"><div><label>Filter Kelas</label><select id="studentClassFilter" onchange="renderStudents()"></select></div><div><label>Cari</label><input id="studentSearch" oninput="renderStudents()" placeholder="Nama/NIS/NISN"></div></div><br><div class="tablewrap"><table><thead><tr><th>No</th><th>NIS</th><th>NISN</th><th>Nama</th><th>L/P</th><th>Kelas</th><th>Jurusan</th><th>Aksi</th></tr></thead><tbody id="studentTable"></tbody></table></div></div>
+</section>
+
+<section id="pertemuan" class="page">
+<div class="card"><h3>Pertemuan Baru</h3>
+<div class="grid">
+<div><label>Pertemuan Ke</label><input id="pNo" type="number" min="1"></div><div><label>Tanggal</label><input id="pDate" type="date"></div><div><label>Kelas</label><select id="pClass"></select></div><div><label>Jam Pelajaran</label><input id="pTime" placeholder="Contoh: 2 x 45 menit"></div>
+</div><div class="grid2" style="margin-top:12px"><div><label>Materi</label><input id="pMateri"></div><div><label>Tujuan Pembelajaran</label><textarea id="pTujuan"></textarea></div><div><label>Agenda Pembelajaran</label><textarea id="pAgenda" placeholder="Pembukaan; Apersepsi; Kegiatan inti; Refleksi..."></textarea></div><div><label>Metode Pembelajaran</label><input id="pMetode"></div><div><label>Catatan Guru</label><textarea id="pCatatan"></textarea></div></div>
+<div class="actions"><button class="btn primary" onclick="saveMeeting()">💾 Simpan Pertemuan</button><button class="btn" onclick="copyLastMeeting()">Salin Agenda Pertemuan Sebelumnya</button><button class="btn" onclick="clearMeetingForm()">Reset</button></div>
+</div>
+<div class="card"><h3>Daftar Pertemuan</h3><div class="tablewrap"><table><thead><tr><th>Pertemuan</th><th>Tanggal</th><th>Kelas</th><th>Materi</th><th>Aksi</th></tr></thead><tbody id="meetingTable"></tbody></table></div></div>
+</section>
+
+<section id="absensi" class="page">
+<div class="card"><h3>Absensi Per Pertemuan</h3><div class="grid"><div><label>Pilih Pertemuan</label><select id="attMeeting" onchange="renderAttendance()"></select></div><div><label>Filter/Cari</label><input id="attSearch" oninput="renderAttendance()" placeholder="Nama/NIS"></div></div><div class="actions"><button class="btn success" onclick="allPresent()">✓ Semua Hadir</button><button class="btn primary" onclick="saveAttendance()">💾 Simpan Absensi</button></div><div id="attSummary" class="notice" style="margin:12px 0"></div><div class="tablewrap"><table><thead><tr><th>No</th><th>NIS</th><th>Nama</th><th>L/P</th><th>Status</th><th>Keterangan</th></tr></thead><tbody id="attTable"></tbody></table></div></div>
+</section>
+
+<section id="sikap" class="page">
+<div class="card"><h3>Asesmen Formatif Per Pertemuan</h3><div class="grid"><div><label>Pilih Pertemuan</label><select id="sikapMeeting" onchange="renderSikap()"></select></div></div><div class="actions"><button class="btn primary" onclick="saveSikap()">💾 Simpan Asesmen Formatif</button></div><div class="tablewrap"><table><thead><tr><th>No</th><th>Nama</th><th>Disiplin</th><th>Tanggung Jawab</th><th>Kerja Sama</th><th>Keaktifan</th><th>Sopan</th><th>Integritas</th><th>Rata-rata</th><th>Predikat</th><th>Catatan</th></tr></thead><tbody id="sikapTable"></tbody></table></div></div>
+</section>
+
+<section id="pengetahuan" class="page">
+<div class="card"><h3>Asesmen Sumatif Per Pertemuan</h3><div class="grid"><div><label>Pilih Pertemuan</label><select id="knowMeeting" onchange="renderKnowledge()"></select></div></div><div class="actions"><button class="btn primary" onclick="saveKnowledge()">💾 Simpan Asesmen Sumatif</button></div><div class="tablewrap"><table><thead><tr><th>No</th><th>NIS</th><th>Nama</th><th>Jenis Asesmen</th><th>Nilai</th><th>Predikat</th><th>Catatan</th></tr></thead><tbody id="knowTable"></tbody></table></div></div>
+</section>
+
+<section id="jurnal" class="page">
+<div class="card"><h3>Jurnal Pembelajaran</h3><div class="grid"><div><label>Pilih Pertemuan</label><select id="journalMeeting" onchange="renderJournal()"></select></div></div><div id="journalContent"></div><div class="actions"><button class="btn primary" onclick="printCurrentJournal()">🖨 Cetak Jurnal</button></div></div>
+</section>
+
+<section id="rekapAbsensi" class="page">
+<div class="card" id="attendanceRecap">
+<div class="recap-toolbar">
+<div><label>Kelas</label><select id="recapAttClass" onchange="renderAttendanceRecap()"><option value="">Pilih Kelas</option></select></div>
+<div><label>Rentang Pertemuan</label><select id="recapAttPeriod" onchange="renderAttendanceRecap()"><option value="all">Semua Pertemuan</option><option value="semester">Semester Aktif</option></select></div>
+<div class="actions"><button class="btn primary" onclick="printRecap('attendanceRecap','Rekap Absensi')">🖨 Cetak Rekap</button><button class="btn" onclick="exportCSV('attendance')">⬇ Excel/CSV</button></div>
+</div>
+<div class="print-head"><h2 id="printAttSchool"></h2><h3>REKAP ABSENSI SISWA</h3><div id="printAttMeta"></div></div>
+<div class="tablewrap"><table><thead><tr><th>No</th><th>NIS</th><th>Nama</th><th>H</th><th>S</th><th>I</th><th>A</th><th>D</th><th>% Kehadiran</th></tr></thead><tbody id="recapAttTable"></tbody></table></div></div>
+</section>
+
+<section id="rekapNilai" class="page">
+<div class="card" id="valueRecap">
+<div class="recap-toolbar">
+<div><label>Kelas</label><select id="recapValueClass" onchange="renderValueRecap()"><option value="">Pilih Kelas</option></select></div>
+<div><label>Jenis Nilai</label><select id="recapType" onchange="renderValueRecap()"><option value="sikap">Asesmen Formatif</option><option value="pengetahuan">Asesmen Sumatif</option></select></div>
+<div class="actions"><button class="btn primary" onclick="printRecap('valueRecap','Rekap Nilai')">🖨 Cetak Rekap</button><button class="btn" onclick="exportCSV('values')">⬇ Excel/CSV</button></div>
+</div>
+<div class="print-head"><h2 id="printValSchool"></h2><h3 id="printValTitle">REKAP NILAI</h3><div id="printValMeta"></div></div>
+<div class="tablewrap"><table><thead id="valueHead"></thead><tbody id="valueBody"></tbody></table></div></div>
+</section>
+
+<section id="pengaturan" class="page">
+<div class="card"><h3>Pengaturan Identitas</h3><div class="grid2">
+<div><label>Nama Sekolah</label><input id="setSchool"></div><div><label>Nama Guru</label><input id="setTeacher"></div><div><label>NIP/NUPTK</label><input id="setNip"></div><div><label>Mata Pelajaran</label><input id="setSubject"></div><div><label>Kelas/Fase</label><input id="setGrade" placeholder="XI / Fase F"></div><div><label>Semester</label><select id="setSemester"><option>Ganjil</option><option>Genap</option></select></div><div><label>Tahun Pelajaran</label><input id="setYear" value="2026/2027"></div><div><label>Jurusan/Konsentrasi Keahlian</label><input id="setMajor"></div>
+</div><div class="actions"><button class="btn primary" onclick="saveSettings()">💾 Simpan Pengaturan</button></div></div>
+<div class="card"><h3>💾 Backup & Restore Data</h3><div class="notice">Gunakan Backup untuk menyimpan seluruh data aplikasi. Restore akan memvalidasi file terlebih dahulu dan membuat salinan keamanan data saat ini sebelum pemulihan.</div><div class="actions"><button class="btn" onclick="backup()">⬇ Backup Data</button><label class="btn" style="cursor:pointer">⬆ Restore Data<input id="restoreFile" type="file" accept=".json" hidden></label></div></div>
+</section>
+<section id="tampilan" class="page">
+<div class="card"><h3>🎨 Ubah Tampilan / Tema</h3>
+<div class="notice">Pilih tema siap pakai atau unggah foto sendiri sebagai latar belakang. Pengaturan tersimpan di browser perangkat ini dan tidak mengubah data siswa, absensi, jurnal, atau nilai.</div>
+<div class="grid2" style="margin-top:12px">
+<div><label>Tema Website</label><select id="themeSelect" onchange="applyTheme(this.value)">
+<option value="default">Biru Profesional</option><option value="green">Hijau Pendidikan</option><option value="purple">Ungu Modern</option><option value="dark">Gelap Elegan</option><option value="warm">Hangat Profesional</option>
+</select></div>
+<div><label>Foto Latar Belakang Dashboard (bisa banyak)</label><input id="bgUpload" type="file" accept="image/*" multiple onchange="uploadBackground(this)"></div>
+</div>
+<div class="actions"><button class="btn" onclick="clearBackground()">Hapus Semua Foto</button><button class="btn" onclick="resetTheme()">Kembalikan Tema Awal</button></div><div class="notice" style="margin-top:10px">Foto dashboard berganti otomatis setiap <b>30 detik</b>. Pilih beberapa foto sekaligus untuk membuat slideshow.</div>
+<div id="themePreview" class="notice" style="margin-top:12px">Preview tema akan tampil di seluruh aplikasi.</div>
+</div></section>
+</main></div>
+
+<div id="modal" class="modal"><div class="modalbox"><h3 id="modalTitle">Form</h3><div id="modalBody"></div><div class="actions"><button class="btn primary" id="modalSave">Simpan</button><button class="btn" onclick="closeModal()">Batal</button></div></div></div>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script>
+const KEY='absensiJurnalGuruV1';
+let db=JSON.parse(localStorage.getItem(KEY)||'null')||{students:[],meetings:[],attendance:{},sikap:{},knowledge:{},settings:{school:'SMK Negeri 7 Pinrang',teacher:'Sumarno',nip:'',subject:'Pendidikan Pancasila',grade:'XI / Fase F',semester:'Ganjil',year:'2026/2027',major:'Agribisnis Perikanan Payau dan Laut',theme:'default',bg:'',bgs:[]}};
+let currentPage='dashboard';
+const $=id=>document.getElementById(id);
+function save(){localStorage.setItem(KEY,JSON.stringify(db));renderAll()}
+function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+function today(){return new Date().toISOString().slice(0,10)}
+function predN(v){v=Number(v)||0;return v>=91?'Sangat Baik':v>=81?'Baik':v>=71?'Cukup':'Perlu Bimbingan'}
+function predS(v){v=Number(v)||0;return v>=3.51?'Sangat Baik':v>=2.51?'Baik':v>=1.51?'Cukup':'Perlu Bimbingan'}
+function classes(){return [...new Set(db.students.map(s=>s.kelas).filter(Boolean))].sort()}
+function studentsFor(cls){return db.students.filter(s=>!cls||s.kelas===cls)}
+function meetingById(id){return db.meetings.find(m=>m.id===id)}
+function selectedMeeting(id){return meetingById(id||$('attMeeting')?.value||db.meetings[0]?.id)}
+function renderAll(){renderSettings();renderClassSelects();renderStudents();renderMeetings();fillMeetingSelects();renderDashboard();renderAttendance();renderSikap();renderKnowledge();renderJournal();renderAttendanceRecap();renderValueRecap();renderRecapClassSelects()}
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>showPage(b.dataset.page));
+function showPage(p){currentPage=p;document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));$(p).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===p));$('title').textContent=document.querySelector(`[data-page="${p}"]`).textContent.replace(/^[^\w]+/,'').trim()}
+function renderSettings(){let s=db.settings;['school','teacher','nip','subject','grade','semester','year','major'].forEach(k=>{if($('set'+k.charAt(0).toUpperCase()+k.slice(1)))$('set'+k.charAt(0).toUpperCase()+k.slice(1)).value=s[k]||''});$('schooltag').textContent=`${s.school} • ${s.subject} • ${s.grade} • ${s.semester} • ${s.year}`}
+function saveSettings(){let s=db.settings;[['school','School'],['teacher','Teacher'],['nip','Nip'],['subject','Subject'],['grade','Grade'],['semester','Semester'],['year','Year'],['major','Major']].forEach(([k,x])=>s[k]=$('set'+x).value);save();alert('Pengaturan tersimpan.')}
+function renderClassSelects(){let opts=classes().map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');$('studentClassFilter').innerHTML='<option value="">Semua Kelas</option>'+opts;$('pClass').innerHTML=opts||'<option value="">Belum ada kelas</option>'}
+function renderRecapClassSelects(){let opts=classes().map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');['recapAttClass','recapValueClass'].forEach(id=>{let el=$(id);if(!el)return;let old=el.value;el.innerHTML='<option value="">Pilih Kelas</option>'+opts;if(classes().includes(old))el.value=old;else el.value=''})}
+function renderStudents(){let q=($('studentSearch')?.value||'').toLowerCase(),c=$('studentClassFilter')?.value||'';let arr=db.students.filter(s=>(!c||s.kelas===c)&&(!q||`${s.nama} ${s.nis} ${s.nisn}`.toLowerCase().includes(q)));$('studentTable').innerHTML=arr.map((s,i)=>`<tr><td>${i+1}</td><td>${esc(s.nis)}</td><td>${esc(s.nisn)}</td><td>${esc(s.nama)}</td><td>${esc(s.lp)}</td><td>${esc(s.kelas)}</td><td>${esc(s.jurusan)}</td><td><button class="btn sm" onclick="editStudent('${s.id}')">Edit</button></td></tr>`).join('')||'<tr><td colspan="8" class="muted">Belum ada data siswa.</td></tr>'}
+$('excelFile').addEventListener('change',e=>{let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=ev=>{try{let wb=XLSX.read(ev.target.result,{type:'array'}),rows=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{defval:''});importStudents(rows)}catch(err){alert('File tidak dapat dibaca: '+err.message)}};r.readAsArrayBuffer(f);e.target.value='' });
+function importStudents(rows){let required=['NIS','NISN','Nama Siswa','L/P','Kelas','Jurusan'];let keys=rows.length?Object.keys(rows[0]):[];let missing=required.filter(x=>!keys.includes(x));if(missing.length){alert('Kolom kurang: '+missing.join(', '));return}let added=0,dup=0;rows.forEach((r,i)=>{let nis=String(r['NIS']).trim(),nisn=String(r['NISN']).trim(),nama=String(r['Nama Siswa']).trim();if(!nama)return;if(db.students.some(s=>(nis&&s.nis===nis)||(nisn&&s.nisn===nisn))){dup++;return}db.students.push({id:crypto.randomUUID(),no:r['No']||i+1,nis,nisn,nama,lp:String(r['L/P']).trim(),kelas:String(r['Kelas']).trim(),jurusan:String(r['Jurusan']).trim(),active:true});added++});save();alert(`Import selesai. Ditambahkan: ${added}. Duplikat dilewati: ${dup}.`)}
+function downloadTemplate(){let ws=XLSX.utils.json_to_sheet([{'No':1,'NIS':'','NISN':'','Nama Siswa':'','L/P':'L','Kelas':'XI','Jurusan':'Agribisnis Perikanan Payau dan Laut'}]);let wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Siswa');XLSX.writeFile(wb,'Template_Data_Siswa.xlsx')}
+function manualStudent(){openStudentModal()}
+function editStudent(id){openStudentModal(db.students.find(s=>s.id===id))}
+function openStudentModal(s={}){$('modalTitle').textContent=s.id?'Edit Siswa':'Tambah Siswa';$('modalBody').innerHTML=`<div class="grid2"><div><label>NIS</label><input id="mNis" value="${esc(s.nis)}"></div><div><label>NISN</label><input id="mNisn" value="${esc(s.nisn)}"></div><div><label>Nama Siswa</label><input id="mNama" value="${esc(s.nama)}"></div><div><label>L/P</label><select id="mLp"><option ${s.lp==='L'?'selected':''}>L</option><option ${s.lp==='P'?'selected':''}>P</option></select></div><div><label>Kelas</label><input id="mKelas" value="${esc(s.kelas)}"></div><div><label>Jurusan</label><input id="mJurusan" value="${esc(s.jurusan)}"></div></div>`;$('modalSave').onclick=()=>{let n={id:s.id||crypto.randomUUID(),nis:$('mNis').value.trim(),nisn:$('mNisn').value.trim(),nama:$('mNama').value.trim(),lp:$('mLp').value,kelas:$('mKelas').value.trim(),jurusan:$('mJurusan').value.trim(),active:true};if(!n.nama){alert('Nama wajib diisi');return}if(db.students.some(x=>x.id!==n.id&&((n.nis&&x.nis===n.nis)||(n.nisn&&x.nisn===n.nisn)))){alert('NIS/NISN sudah digunakan.');return}let idx=db.students.findIndex(x=>x.id===n.id);idx>=0?db.students[idx]=n:db.students.push(n);closeModal();save()};$('modal').classList.add('show')}
+function closeModal(){$('modal').classList.remove('show')}
+function clearStudents(){if(confirm('Hapus semua data siswa? Riwayat absensi/nilai tidak otomatis ikut dihapus.')){db.students=[];save()}}
+function clearMeetingForm(){$('pNo').value=db.meetings.length+1;$('pDate').value=today();$('pMateri').value='';$('pTujuan').value='';$('pAgenda').value='';$('pMetode').value='';$('pCatatan').value=''}
+function saveMeeting(){let m={id:crypto.randomUUID(),no:Number($('pNo').value)||db.meetings.length+1,date:$('pDate').value||today(),kelas:$('pClass').value,time:$('pTime').value,materi:$('pMateri').value,tujuan:$('pTujuan').value,agenda:$('pAgenda').value,metode:$('pMetode').value,catatan:$('pCatatan').value};db.meetings.push(m);save();alert('Pertemuan tersimpan.');showPage('pertemuan')}
+function copyLastMeeting(){let a=db.meetings[db.meetings.length-1];if(!a){alert('Belum ada pertemuan.');return}$('pNo').value=a.no+1;$('pDate').value=today();$('pClass').value=a.kelas;$('pTime').value=a.time;$('pMateri').value=a.materi;$('pTujuan').value=a.tujuan;$('pAgenda').value=a.agenda;$('pMetode').value=a.metode;$('pCatatan').value=a.catatan}
+function renderMeetings(){$('meetingTable').innerHTML=[...db.meetings].sort((a,b)=>a.no-b.no).map(m=>`<tr><td>P${m.no}</td><td>${m.date}</td><td>${esc(m.kelas)}</td><td>${esc(m.materi)}</td><td><button class="btn sm" onclick="useMeeting('${m.id}')">Buka</button></td></tr>`).join('')||'<tr><td colspan="5">Belum ada pertemuan.</td></tr>'}
+function useMeeting(id){['attMeeting','sikapMeeting','knowMeeting','journalMeeting'].forEach(x=>$(x).value=id);showPage('absensi');renderAttendance()}
+function fillMeetingSelects(){let opts=db.meetings.slice().sort((a,b)=>a.no-b.no).map(m=>`<option value="${m.id}">P${m.no} — ${m.date} — ${esc(m.kelas)}</option>`).join('');['attMeeting','sikapMeeting','knowMeeting','journalMeeting'].forEach(x=>{let old=$(x).value;$(x).innerHTML=opts;if(db.meetings.some(m=>m.id===old))$(x).value=old})}
+function getAtt(m,s){return db.attendance[m.id]?.[s.id]||{status:'H',ket:''}}
+function renderAttendance(){let m=selectedMeeting($('attMeeting')?.value);if(!m){$('attTable').innerHTML='';$('attSummary').textContent='Belum ada pertemuan.';return}let q=($('attSearch')?.value||'').toLowerCase();let arr=studentsFor(m.kelas).filter(s=>`${s.nama} ${s.nis}`.toLowerCase().includes(q));let rec={H:0,S:0,I:0,A:0,D:0};arr.forEach(s=>rec[getAtt(m,s).status]++);$('attSummary').innerHTML=`Siswa: <b>${arr.length}</b> &nbsp; Hadir: <b>${rec.H}</b> &nbsp; Sakit: <b>${rec.S}</b> &nbsp; Izin: <b>${rec.I}</b> &nbsp; Alpa: <b>${rec.A}</b> &nbsp; Dispensasi: <b>${rec.D}</b> &nbsp; Kehadiran: <b>${arr.length?((rec.H/arr.length)*100).toFixed(1):0}%</b>`;$('attTable').innerHTML=arr.map((s,i)=>{let a=getAtt(m,s);return `<tr><td>${i+1}</td><td>${esc(s.nis)}</td><td>${esc(s.nama)}</td><td>${esc(s.lp)}</td><td><select data-att="${s.id}"><option ${a.status==='H'?'selected':''}>H</option><option ${a.status==='S'?'selected':''}>S</option><option ${a.status==='I'?'selected':''}>I</option><option ${a.status==='A'?'selected':''}>A</option><option ${a.status==='D'?'selected':''}>D</option></select></td><td><input data-ket="${s.id}" value="${esc(a.ket)}"></td></tr>`}).join('')}
+function allPresent(){let m=selectedMeeting();if(!m)return;db.attendance[m.id]={};studentsFor(m.kelas).forEach(s=>db.attendance[m.id][s.id]={status:'H',ket:''});renderAttendance()}
+function saveAttendance(){let m=selectedMeeting();if(!m)return;db.attendance[m.id]=db.attendance[m.id]||{};document.querySelectorAll('[data-att]').forEach(x=>{let id=x.dataset.att;db.attendance[m.id][id]={status:x.value,ket:document.querySelector(`[data-ket="${id}"]`).value}});save();alert('Absensi tersimpan.')}
+const opts4=[1,2,3,4].map(v=>`<option value="${v}">${v}</option>`).join('');
+function renderSikap(){let m=meetingById($('sikapMeeting')?.value);if(!m){$('sikapTable').innerHTML='';return}let arr=studentsFor(m.kelas);$('sikapTable').innerHTML=arr.map((s,i)=>{let x=db.sikap[m.id]?.[s.id]||{vals:[3,3,3,3,3,3],cat:''};let avg=x.vals.reduce((a,b)=>a+Number(b),0)/6;return `<tr><td>${i+1}</td><td>${esc(s.nama)}</td>${x.vals.map((v,j)=>`<td><select data-sikap="${s.id}-${j}">${[1,2,3,4].map(n=>`<option ${Number(v)===n?'selected':''} value="${n}">${n}</option>`).join('')}</select></td>`).join('')}<td>${avg.toFixed(2)}</td><td>${predS(avg)}</td><td><input data-sikapcat="${s.id}" value="${esc(x.cat)}"></td></tr>`}).join('')}
+function saveSikap(){let m=meetingById($('sikapMeeting').value);if(!m)return;db.sikap[m.id]=db.sikap[m.id]||{};studentsFor(m.kelas).forEach(s=>{let vals=[0,1,2,3,4,5].map(j=>Number(document.querySelector(`[data-sikap="${s.id}-${j}"]`)?.value||3));db.sikap[m.id][s.id]={vals,cat:document.querySelector(`[data-sikapcat="${s.id}"]`)?.value||''}});save();alert('Nilai sikap tersimpan.')}
+function renderKnowledge(){let m=meetingById($('knowMeeting')?.value);if(!m){$('knowTable').innerHTML='';return}let arr=studentsFor(m.kelas);$('knowTable').innerHTML=arr.map((s,i)=>{let x=db.knowledge[m.id]?.[s.id]||{type:'Tes tertulis',value:'',cat:''};return `<tr><td>${i+1}</td><td>${esc(s.nis)}</td><td>${esc(s.nama)}</td><td><select data-ktype="${s.id}">${['Tes tertulis','Tanya jawab','LKPD','Kuis','Tugas','Presentasi','Asesmen lainnya'].map(v=>`<option ${x.type===v?'selected':''}>${v}</option>`).join('')}</select></td><td><input type="number" min="0" max="100" data-kval="${s.id}" value="${esc(x.value)}" style="width:90px"></td><td id="kp-${s.id}">${x.value===''?'':predN(x.value)}</td><td><input data-kcat="${s.id}" value="${esc(x.cat)}"></td></tr>`}).join('');document.querySelectorAll('[data-kval]').forEach(i=>i.oninput=()=>{$(`kp-${i.dataset.kval}`).textContent=i.value===''?'':predN(i.value)})}
+function saveKnowledge(){let m=meetingById($('knowMeeting').value);if(!m)return;db.knowledge[m.id]=db.knowledge[m.id]||{};studentsFor(m.kelas).forEach(s=>db.knowledge[m.id][s.id]={type:document.querySelector(`[data-ktype="${s.id}"]`).value,value:document.querySelector(`[data-kval="${s.id}"]`).value,cat:document.querySelector(`[data-kcat="${s.id}"]`).value});save();alert('Nilai pengetahuan tersimpan.')}
+function counts(m){let r={H:0,S:0,I:0,A:0,D:0};studentsFor(m.kelas).forEach(s=>r[getAtt(m,s).status]++);return r}
+function renderJournal(){let m=meetingById($('journalMeeting')?.value);if(!m){$('journalContent').innerHTML='<p class="muted">Belum ada pertemuan.</p>';return}let c=counts(m);$('journalContent').innerHTML=`<div class="card"><h2>JURNAL PEMBELAJARAN</h2><p><b>Pertemuan:</b> ${m.no} &nbsp; <b>Tanggal:</b> ${m.date} &nbsp; <b>Kelas:</b> ${esc(m.kelas)}</p><p><b>Mata Pelajaran:</b> ${esc(db.settings.subject)}</p><p><b>Materi:</b> ${esc(m.materi)}</p><p><b>Tujuan Pembelajaran:</b><br>${esc(m.tujuan).replace(/\n/g,'<br>')}</p><p><b>Agenda/Kegiatan:</b><br>${esc(m.agenda).replace(/\n/g,'<br>')}</p><p><b>Metode:</b> ${esc(m.metode)}</p><p><b>Jumlah Siswa:</b> ${studentsFor(m.kelas).length} | <b>H:</b> ${c.H} | <b>S:</b> ${c.S} | <b>I:</b> ${c.I} | <b>A:</b> ${c.A} | <b>D:</b> ${c.D}</p><hr><p><b>Kegiatan Pendahuluan:</b> ${esc(m.agenda)}</p><p><b>Kegiatan Inti:</b> ${esc(m.agenda)}</p><p><b>Kegiatan Penutup:</b> Refleksi dan tindak lanjut.</p><p><b>Asesmen:</b> Formatif dan Sumatif.</p><p><b>Catatan/Kendala:</b> ${esc(m.catatan)}</p><p><b>Tindak Lanjut:</b> Pendampingan/penguatan sesuai hasil asesmen.</p></div>`}
+function renderAttendanceRecap(){
+ let cls=$('recapAttClass')?.value||'';
+ if(!cls){$('recapAttTable').innerHTML='<tr><td colspan="9" class="muted">Silakan pilih kelas untuk menampilkan rekap.</td></tr>';if($('printAttMeta'))$('printAttMeta').textContent='Kelas belum dipilih';return}
+ let ms=db.meetings.slice().sort((a,b)=>a.no-b.no).filter(m=>m.kelas===cls);
+ let students=db.students.filter(s=>s.kelas===cls);
+ $('recapAttTable').innerHTML=students.map((s,i)=>{let r={H:0,S:0,I:0,A:0,D:0};ms.forEach(m=>r[getAtt(m,s).status]++);let total=Object.values(r).reduce((a,b)=>a+b,0);return `<tr><td>${i+1}</td><td>${esc(s.nis)}</td><td>${esc(s.nama)}</td><td>${r.H}</td><td>${r.S}</td><td>${r.I}</td><td>${r.A}</td><td>${r.D}</td><td>${total?(r.H/total*100).toFixed(1):0}%</td></tr>`}).join('')||'<tr><td colspan="9">Belum ada data.</td></tr>';
+ if($('printAttSchool'))$('printAttSchool').textContent=db.settings.school||'';
+ if($('printAttMeta'))$('printAttMeta').textContent=`Kelas: ${cls||'Semua Kelas'} • Mata Pelajaran: ${db.settings.subject||''} • Semester: ${db.settings.semester||''} • Tahun Pelajaran: ${db.settings.year||''}`;
+}
+function renderValueRecap(){
+ let type=$('recapType')?.value||'sikap',cls=$('recapValueClass')?.value||'';
+ if(!cls){$('valueHead').innerHTML='<tr><th>No</th><th>NIS</th><th>Nama</th></tr>';$('valueBody').innerHTML='<tr><td colspan="4" class="muted">Silakan pilih kelas untuk menampilkan rekap.</td></tr>';if($('printValMeta'))$('printValMeta').textContent='Kelas belum dipilih';return}
+ let ms=db.meetings.slice().sort((a,b)=>a.no-b.no).filter(m=>m.kelas===cls),students=db.students.filter(s=>s.kelas===cls);
+ $('valueHead').innerHTML=`<tr><th>No</th><th>NIS</th><th>Nama</th>${ms.map(m=>`<th>P${m.no}</th>`).join('')}<th>Rata-rata</th></tr>`;
+ $('valueBody').innerHTML=students.map((s,i)=>{let vals=ms.map(m=>{if(type==='sikap'){let x=db.sikap[m.id]?.[s.id];return x?x.vals.reduce((a,b)=>a+Number(b),0)/6:null}else{let x=db.knowledge[m.id]?.[s.id];return x&&x.value!==''?Number(x.value):null}});let nums=vals.filter(v=>v!=null),avg=nums.length?nums.reduce((a,b)=>a+b,0)/nums.length:null;return `<tr><td>${i+1}</td><td>${esc(s.nis)}</td><td>${esc(s.nama)}</td>${vals.map(v=>`<td>${v==null?'-':(type==='sikap'?v.toFixed(2):v)}</td>`).join('')}<td>${avg==null?'-':(type==='sikap'?avg.toFixed(2):avg.toFixed(1))}</td></tr>`}).join('')||'<tr><td colspan="5">Belum ada data.</td></tr>';
+ if($('printValSchool'))$('printValSchool').textContent=db.settings.school||''; if($('printValTitle'))$('printValTitle').textContent=type==='sikap'?'REKAP ASESMEN FORMATIF':'REKAP ASESMEN SUMATIF'; if($('printValMeta'))$('printValMeta').textContent=`Kelas: ${cls||'Semua Kelas'} • Mata Pelajaran: ${db.settings.subject||''} • Semester: ${db.settings.semester||''} • Tahun Pelajaran: ${db.settings.year||''}`;
+}
+function printRecap(id,title){let cls=id==='attendanceRecap'?$('recapAttClass')?.value:$('recapValueClass')?.value;if(!cls){alert('Pilih kelas terlebih dahulu sebelum mencetak.');return}document.querySelectorAll('.page').forEach(p=>p.classList.remove('printing'));let el=$(id);el.closest('.page').classList.add('printing');let old=document.title;document.title=title+' - '+cls;setTimeout(()=>{window.print();document.title=old;el.closest('.page').classList.remove('printing')},50)}
+function renderDashboard(){ startDashboardSlideshow(); }
+function drawChart(){let can=$('chart'),ctx=can.getContext('2d'),w=can.width=can.clientWidth*2,h=can.height=220;ctx.clearRect(0,0,w,h);let ms=db.meetings.slice().sort((a,b)=>a.no-b.no),vals=ms.map(m=>{let x=Object.values(db.knowledge[m.id]||{}).map(v=>Number(v.value)).filter(v=>!isNaN(v));return x.length?x.reduce((a,b)=>a+b,0)/x.length:0});if(!vals.length)return;let max=Math.max(100,...vals);ctx.strokeStyle='#176b87';ctx.lineWidth=4;ctx.beginPath();vals.forEach((v,i)=>{let x=40+i*(w-70)/Math.max(1,vals.length-1),y=h-30-v/max*(h-60);i?ctx.lineTo(x,y):ctx.moveTo(x,y)});ctx.stroke();ctx.fillStyle='#203040';ctx.font='22px Arial';vals.forEach((v,i)=>{let x=40+i*(w-70)/Math.max(1,vals.length-1),y=h-30-v/max*(h-60);ctx.fillText('P'+ms[i].no,x-10,h-5);ctx.beginPath();ctx.arc(x,y,5,0,Math.PI*2);ctx.fill()})}
+function printElement(id){let content=$(id).outerHTML;let win=open('','_blank');win.document.write(`<html><head><title>Cetak</title><style>body{font-family:Arial;padding:25px}table{width:100%;border-collapse:collapse}th,td{border:1px solid #999;padding:6px;font-size:12px}th{background:#eee}</style></head><body><h2>${esc(db.settings.school)}</h2>${content}</body></html>`);win.document.close();win.print()}
+function printCurrentJournal(){printElement('journalContent')}
+function exportCSV(type){let cls=type==='attendance'?$('recapAttClass')?.value:$('recapValueClass')?.value;if(!cls){alert('Pilih kelas terlebih dahulu sebelum export.');return}let table=type==='attendance'?$('attendanceRecap').querySelector('table'):$('valueRecap').querySelector('table');let csv=[...table.rows].map(r=>[...r.cells].map(c=>`"${c.innerText.replace(/"/g,'""')}"`).join(',')).join('\n');let a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download=`Rekap_${type}_${cls.replace(/[^a-z0-9_-]+/gi,'_')}.csv`;a.click()}
+function backup(){const payload={app:'Absensi & Jurnal Pembelajaran Guru',version:3,createdAt:new Date().toISOString(),data:JSON.parse(JSON.stringify(db))};const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`Backup_Absensi_Jurnal_${new Date().toISOString().slice(0,10)}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+$('restoreFile').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const raw=JSON.parse(r.result),x=raw.data||raw;if(!x||!Array.isArray(x.students)||!Array.isArray(x.meetings)||typeof x.attendance!=='object'||typeof x.sikap!=='object'||typeof x.knowledge!=='object')throw Error('File backup tidak valid atau bukan backup aplikasi ini.');const safety={app:'Absensi & Jurnal Pembelajaran Guru - Safety Backup',version:1,createdAt:new Date().toISOString(),data:JSON.parse(JSON.stringify(db))};localStorage.setItem(KEY+'_before_restore',JSON.stringify(safety));if(!confirm(`Restore akan mengganti data saat ini dengan backup tanggal ${raw.createdAt?new Date(raw.createdAt).toLocaleString('id-ID'):'tidak diketahui'}. Backup keamanan data saat ini juga dibuat. Lanjutkan?`))return;db={...db,...x,students:x.students||[],meetings:x.meetings||[],attendance:x.attendance||{},sikap:x.sikap||{},knowledge:x.knowledge||{},settings:{...db.settings,...(x.settings||{})}};if(!Array.isArray(db.settings.bgs))db.settings.bgs=db.settings.bg?[db.settings.bg]:[];localStorage.setItem(KEY,JSON.stringify(db));renderAll();initTheme();alert('Restore berhasil. Data backup telah dimuat dan backup keamanan otomatis dibuat.')}catch(err){alert('Restore gagal: '+err.message)}finally{e.target.value=''}};r.readAsText(f)})
+
+function applyTheme(theme,saveIt=true){document.body.classList.remove('theme-green','theme-purple','theme-dark','theme-warm');if(theme&&theme!=='default')document.body.classList.add('theme-'+theme);if(saveIt){db.settings.theme=theme||'default';saveThemeOnly()}const labels={default:'Biru Profesional',green:'Hijau Pendidikan',purple:'Ungu Modern',dark:'Gelap Elegan',warm:'Hangat Profesional'};if($('themePreview'))$('themePreview').innerHTML='Tema aktif: <b>'+esc(labels[theme]||labels.default)+'</b>'+(getBackgrounds().length?' • '+getBackgrounds().length+' foto aktif':'')}
+function saveThemeOnly(){localStorage.setItem(KEY,JSON.stringify(db))}
+function getBackgrounds(){db.settings=db.settings||{};if(!Array.isArray(db.settings.bgs))db.settings.bgs=db.settings.bg?[db.settings.bg]:[];return db.settings.bgs.filter(Boolean)}
+function uploadBackground(input){const files=[...(input.files||[])];if(!files.length)return;if(files.length>20){alert('Maksimal 20 foto sekaligus.');input.value='';return}const good=files.filter(f=>f.type.startsWith('image/')&&f.size<=2*1024*1024);if(!good.length){alert('Foto tidak valid atau lebih dari 2 MB.');input.value='';return}let loaded=0,arr=[];good.forEach(f=>{const r=new FileReader();r.onload=()=>{arr.push(r.result);loaded++;if(loaded===good.length){db.settings.bgs=[...getBackgrounds(),...arr];db.settings.bg=db.settings.bgs[0]||'';saveThemeOnly();applyBackground();startDashboardSlideshow();alert(`${arr.length} foto berhasil ditambahkan.`)}};r.readAsDataURL(f)})}
+function applyBackground(){const bgs=getBackgrounds();if(!bgs.length){document.body.style.backgroundImage='';document.body.classList.remove('has-bg');if($('bgCounter'))$('bgCounter').textContent='0 foto';return}if($('bgCounter'))$('bgCounter').textContent=`${bgs.length} foto • otomatis 30 dtk`;setDashboardBackground(currentBgIndex%bgs.length);}
+let currentBgIndex=0,bgTimer=null;
+function setDashboardBackground(i){const bgs=getBackgrounds();if(!bgs.length){document.body.style.backgroundImage='';return}currentBgIndex=i%bgs.length;document.body.style.backgroundImage=`url("${bgs[currentBgIndex]}")`;const hero=$('dashboardHero');if(hero){hero.style.backgroundImage='none'}}
+function startDashboardSlideshow(){clearInterval(bgTimer);const bgs=getBackgrounds();if($('bgCounter'))$('bgCounter').textContent=bgs.length?`${bgs.length} foto • otomatis 30 dtk`:'0 foto';setDashboardBackground(currentBgIndex);if(bgs.length>1)bgTimer=setInterval(()=>setDashboardBackground(currentBgIndex+1),30000)}
+function clearBackground(){db.settings.bgs=[];delete db.settings.bg;saveThemeOnly();currentBgIndex=0;applyBackground();startDashboardSlideshow();if($('bgUpload'))$('bgUpload').value=''}
+function resetTheme(){db.settings.theme='default';db.settings.bgs=[];delete db.settings.bg;saveThemeOnly();if($('themeSelect'))$('themeSelect').value='default';applyTheme('default',false);applyBackground();startDashboardSlideshow()}
+function initTheme(){db.settings=db.settings||{};if(!Array.isArray(db.settings.bgs))db.settings.bgs=db.settings.bg?[db.settings.bg]:[];if($('themeSelect'))$('themeSelect').value=db.settings.theme||'default';applyTheme(db.settings.theme||'default',false);applyBackground();startDashboardSlideshow()}
+
+clearMeetingForm();renderAll();initTheme();
+</script>
+</body>
+</html>
